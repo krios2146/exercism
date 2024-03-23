@@ -1,11 +1,10 @@
 import gleam/list
+import gleam/pair
 
 pub fn place_location_to_treasure_location(
   place_location: #(String, Int),
 ) -> #(Int, String) {
-  case place_location {
-    #(place, location) -> #(location, place)
-  }
+  pair.swap(place_location)
 }
 
 pub fn treasure_location_matches_place_location(
@@ -19,12 +18,8 @@ pub fn count_place_treasures(
   place: #(String, #(String, Int)),
   treasures: List(#(String, #(Int, String))),
 ) -> Int {
-  let place_location = place.1
-
-  list.map(treasures, fn(x) { x.1 })
-  |> list.filter(fn(x) {
-    treasure_location_matches_place_location(place_location, x)
-  })
+  list.map(treasures, pair.second)
+  |> list.filter(treasure_location_matches_place_location(place.1, _))
   |> list.length()
 }
 
@@ -33,20 +28,14 @@ pub fn special_case_swap_possible(
   place: #(String, #(String, Int)),
   desired_treasure: #(String, #(Int, String)),
 ) -> Bool {
-  case found_treasure, place, desired_treasure {
-    #("Brass Spyglass", _), #("Abandoned Lighthouse", _), _ -> True
-    #("Amethyst Octopus", _), #("Stormy Breakwater", _), #("Crystal Crab", _) ->
+  case found_treasure.0, place.0, desired_treasure.0 {
+    "Brass Spyglass", "Abandoned Lighthouse", _ -> True
+    "Amethyst Octopus", "Stormy Breakwater", "Crystal Crab" -> True
+    "Amethyst Octopus", "Stormy Breakwater", "Glass Starfish" -> True
+    "Vintage Pirate Hat", "Harbor Managers Office", "Model Ship in Large Bottle" ->
       True
-    #("Amethyst Octopus", _), #("Stormy Breakwater", _), #("Glass Starfish", _) ->
+    "Vintage Pirate Hat", "Harbor Managers Office", "Antique Glass Fishnet Float" ->
       True
-    #("Vintage Pirate Hat", _), #("Harbor Managers Office", _), #(
-      "Model Ship in Large Bottle",
-      _,
-    ) -> True
-    #("Vintage Pirate Hat", _), #("Harbor Managers Office", _), #(
-      "Antique Glass Fishnet Float",
-      _,
-    ) -> True
     _, _, _ -> False
   }
 }

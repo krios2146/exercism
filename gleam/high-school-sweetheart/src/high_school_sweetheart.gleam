@@ -1,5 +1,6 @@
 import gleam/string
 import gleam/result
+import gleam/list
 
 pub fn first_letter(name: String) {
   name
@@ -16,10 +17,10 @@ pub fn initial(name: String) {
 }
 
 pub fn initials(full_name: String) {
-  case string.split(full_name, on: " ") {
-    [first, last] -> string.append(initial(first) <> " ", initial(last))
-    _ -> full_name
-  }
+  full_name
+  |> string.split(" ")
+  |> list.map(initial)
+  |> string.join(" ")
 }
 
 pub fn pair(full_name1: String, full_name2: String) {

@@ -17,11 +17,9 @@ pub fn fahrenheit_to_celsius(f: Float) -> Float {
 
 pub fn compare_temperature(left: Temperature, right: Temperature) -> Order {
   case left, right {
-    Celsius(x), Celsius(y) -> float.compare(x, y)
+    Celsius(x), Celsius(y) | Fahrenheit(x), Fahrenheit(y) -> float.compare(x, y)
     Celsius(x), Fahrenheit(y) -> float.compare(x, fahrenheit_to_celsius(y))
     Fahrenheit(x), Celsius(y) -> float.compare(fahrenheit_to_celsius(x), y)
-    Fahrenheit(x), Fahrenheit(y) ->
-      float.compare(fahrenheit_to_celsius(x), fahrenheit_to_celsius(y))
   }
 }
 

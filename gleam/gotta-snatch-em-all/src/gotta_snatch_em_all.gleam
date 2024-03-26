@@ -43,5 +43,5 @@ pub fn total_cards(collections: List(Set(String))) -> Int {
 
 pub fn shiny_cards(collection: Set(String)) -> Set(String) {
   collection
-  |> set.filter(fn(card) { string.starts_with(card, "Shiny ") })
+  |> set.filter(string.starts_with(_, "Shiny ")
 }
